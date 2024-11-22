@@ -48,3 +48,24 @@ export const removeTransaction = createAsyncThunk(
 );
 
 // create slice
+
+const transactionSlice = createSlice({
+    name : "transaction",
+    initialState,
+    extraReducers : (builder) =>{
+        builder
+        .addCase(fetchTransactions.pending, (state) => {
+            state.isLoading = true;
+            state.isError = false;
+        })
+        .addCase(fetchTransactions.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.transactions = action.payload;
+        })
+        .addCase(fetchTransactions.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.error = action.error.message;
+        })
+    }
+})
