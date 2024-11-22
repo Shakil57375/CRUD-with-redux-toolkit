@@ -97,6 +97,22 @@ const transactionSlice = createSlice({
             state.isError = true;
             state.error = action.error.message;
         })
+        .addCase(removeTransaction.pending, (state) => {
+            state.isLoading = true;
+            state.isError = false;
+        })
+        .addCase(removeTransaction.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+            state.transactions = state.transactions.filter(transaction => transaction.id !== action.payload)
+        })
+        .addCase(removeTransaction.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.error = action.error.message;
+        })
         
     }
 })
+
+export default transactionSlice.reducer;
