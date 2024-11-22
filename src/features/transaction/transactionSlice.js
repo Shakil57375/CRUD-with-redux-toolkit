@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addTransactions,
   deleteTransaction,
@@ -60,6 +60,7 @@ const transactionSlice = createSlice({
         })
         .addCase(fetchTransactions.fulfilled, (state, action) => {
             state.isLoading = false;
+            state.isError = false;
             state.transactions = action.payload;
         })
         .addCase(fetchTransactions.rejected, (state, action) => {
@@ -67,5 +68,35 @@ const transactionSlice = createSlice({
             state.isError = true;
             state.error = action.error.message;
         })
+        .addCase(createTransaction.pending, (state) => {
+            state.isLoading = true;
+            state.isError = false;
+        })
+        .addCase(createTransaction.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+            state.transactions.push(action.payload);
+        })
+        .addCase(createTransaction.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.error = action.error.message;
+        })
+        .addCase(changeTransaction.pending, (state) => {
+            state.isLoading = true;
+            state.isError = false;
+        })
+        .addCase(changeTransaction.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+            const indexToUpdate = state.transactions.findIndex(transaction => transaction.id === action.payload.id)
+            state.transactions[indexToUpdate] = action.payload;
+        })
+        .addCase(changeTransaction.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.error = action.error.message;
+        })
+        
     }
 })
