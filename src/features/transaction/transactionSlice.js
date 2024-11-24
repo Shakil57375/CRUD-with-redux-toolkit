@@ -14,6 +14,7 @@ const initialState = {
 };
 
 
+// async thank 
 export const fetchTransactions = createAsyncThunk(
   "/transaction/fetchTransactions",
   async () => {
